@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
+  --_display-grid: grid;
+  --_container-width: 1200;
+  --_default-padding: 80px 40px;
+}
+
+section {
+  position: relative;
+  display: var(--_display-grid, grid);
+}
+section div[datatype=wrapper] {
+  position: absolute;
+  inset: 0 0 0 0;
+  z-index: -1;
+}
+section div[datatype=column] {
+  position: relative;
+}
+section div[datatype=column] > div:not([datatype=wrapper]) {
+  grid-area: 1/1/2/2;
+}
+section div[datatype=column]:where([datahasboxshadow=true], [datadragover=true])::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+section div[datatype=column][datadragover=true] {
+  border: 2px solid rgba(37, 82, 246, 0.3568627451);
+  position: relative;
+}
+@keyframes attachanim {
+  from {
+    transform: translate(-50%, -10px) scale(1, 1);
+  }
+  to {
+    transform: translate(-50%, 0) scale(1, 1);
+  }
+}
+section div[datatype=column][datadragover=true]::before {
+  display: none;
+  content: "Attach";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  animation: attachanim 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 1 forwards;
+  background: #2551f6;
+  color: #fff;
+  border-radius: 0px 0px 4px 4px;
+  padding: 10px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  z-index: 222;
+}/*# sourceMappingURL=index.css.map */

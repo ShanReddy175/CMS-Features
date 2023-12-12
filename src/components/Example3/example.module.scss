@@ -1,0 +1,130 @@
+
+
+.dnd__cls {
+    // padding: 50px 50px;
+    // grid-column: full-width;
+    // & > *{
+    // }
+
+    max-width: 1280px;
+    margin-inline: auto;
+    margin-block: 150px;
+
+    .comp__header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        h1{
+            font-size: clamp(40px, 40%, 60px);
+            font-weight: clamp(500, 700, 900);
+            text-transform: uppercase;
+            color: color-mix(in lch, yellow 10%, green 45%);
+        }
+    }
+
+    .body{
+        margin-block-start: 30px;
+        // border: 2px solid red;
+        border-radius: 4px;
+        // padding: 5px;
+        // border: 2px solid color-mix(in lch, green, yellow);
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+
+        // img{
+        //     display: flex;
+        //     width: 100%;
+        //     // object-fit: cover;
+        // }
+
+        section{
+            // padding: var(--_default-padding);
+            padding: 5px;
+            border: 2px solid color-mix(in lch, green, yellow);
+            display: grid;
+            grid-template-rows: minmax(45vh, auto);
+            // grid-template-rows: minmax(calc((1.801 * var(--one-unit)) - (var(--scrollbar-width) * 0.018009999999999998)),auto) minmax(calc((3.165 * var(--one-unit)) - (var(--scrollbar-width) * 0.03165)),auto);
+            // grid-template-rows: minmax(calc((39.061 * var(--one-unit)) - (var(--scrollbar-width) * 0.39061)),auto);
+            grid-template-columns: repeat(2,  1fr);
+
+            & > div{
+                &[datatype="column"]{
+                    display: grid;
+                    // grid-area: 1/1/2/1;
+                    // width: 50%;
+                    border: 2px solid color-mix(in lch, rgb(128, 15, 0), yellow);
+                    // padding: 5px;
+                    border-radius: 4px;
+
+                    &[id="cms__col1"]{
+                        position: relative;
+
+                        & > .col__wrapper{
+                            display: none;
+                            position: absolute;
+                            right: 0;
+                            left: auto;
+                            top: 0;
+                            width: 50%;
+                            height: 100%;
+                            z-index: 1;
+                            background: red;
+
+                        }
+                    }
+                }
+            }
+        }
+
+        [datadivtype="element"]{
+            // &#sdschfsf__kh51{
+            //     --_marginLeftValue: 0;
+            //     --_marginRightValue: 0;
+            //     --_marginTopValue: 0;
+            //     --_marginBottomValue: 0;
+            //     --_elementWidth: 30;
+            //     --_elementHeight: 100;
+    
+            //     display: flex;
+            //     flex-direction: column;
+            //     margin: calc(1px * var(--_marginTopValue)) calc(1px * var(--_marginRightValue)) calc(1px * var(--_marginBottomValue)) calc(1px * var(--_marginLeftValue));
+            //     width: calc(1% * var(--_elementWidth, 200));
+            //     height: calc(1px * var(--_elementHeight, 200));
+            //     cursor: move;
+    
+            //     & > div{
+            //         &.element__wrapper{
+            //             display: flex;
+            //             // flex-direction: column;
+            //             width: 100%;
+            //             height: 100%;
+    
+            //             img{
+            //                 width: 100%;
+            //                 height: 100%;
+            //                 border-radius: 4px;
+            //             }
+            //         }
+            //     }
+            // }
+
+            // &[id="sdschfsf__kh51"]{
+            //     position: relative;
+            //     &::before{
+            //         content: '';
+            //         position: absolute;
+            //         right: auto;
+            //         left: 0;
+            //         top: 0;
+            //         width: 50%;
+            //         height: 100%;
+            //         background: #000;
+            //     }
+            // }
+            
+        }
+    }
+}

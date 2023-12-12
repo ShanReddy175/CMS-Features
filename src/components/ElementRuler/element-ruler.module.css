@@ -1,0 +1,63 @@
+.element__ruler {
+  display: flex;
+  --_ruler-color: #9A27D5;
+  --_ruler-size: 1px;
+  pointer-events: none;
+}
+.element__ruler * {
+  pointer-events: none;
+}
+.element__ruler span {
+  position: fixed;
+  background: var(--_ruler-color);
+}
+.element__ruler span[datatype^=inline] {
+  width: var(--_ruler-size);
+  height: auto;
+}
+.element__ruler span[datatype^=inline][datatype=inline-start] {
+  display: flex;
+  top: var(--_inline-start-new-ys-top, 0);
+  bottom: var(--_inline-start-new-ys-bottom, 0);
+  left: calc(var(--_inline-start-xs, 0) - 0px);
+  z-index: 999;
+}
+.element__ruler span[datatype^=inline][datatype=inline-end] {
+  display: flex;
+  top: var(--_inline-end-new-ys-top, 0);
+  bottom: var(--_inline-end-new-ys-bottom, 0);
+  left: calc(var(--_inline-end-xs, 0) - 0px);
+  z-index: 999;
+}
+.element__ruler span[datatype^=inline][datatype=inline-center] {
+  display: flex;
+  top: var(--_inline-center-new-ys-top, 0);
+  bottom: var(--_inline-center-new-ys-bottom, 0);
+  left: calc(var(--_inline-center-xs, 0) - 0px);
+  z-index: 999;
+}
+.element__ruler span[datatype^=block] {
+  width: auto;
+  height: var(--_ruler-size);
+}
+.element__ruler span[datatype^=block][datatype=block-start] {
+  display: flex;
+  top: var(--_block-start-xs, 0);
+  left: var(--_block-start-new-xs-left, 0);
+  right: var(--_block-start-new-xs-right, 0);
+  z-index: 999;
+}
+.element__ruler span[datatype^=block][datatype=block-end] {
+  display: flex;
+  top: var(--_block-end-xs, 0);
+  left: var(--_block-end-new-xs-left, 0);
+  right: var(--_block-end-new-xs-right, 0);
+  z-index: 999;
+}
+.element__ruler span[datatype^=block][datatype=block-center] {
+  display: flex;
+  top: var(--block-center-xs, 0);
+  left: var(--_block-center-new-xs-left, 0);
+  right: var(--_block-center-new-xs-right, 0);
+  z-index: 999;
+}/*# sourceMappingURL=element-ruler.module.css.map */

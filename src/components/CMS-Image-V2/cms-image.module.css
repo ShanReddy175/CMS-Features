@@ -1,0 +1,51 @@
+.sc__element {
+  --_elementWidth: 30;
+  --_elementHeight: 200;
+  --_aspect-ratio: 0.5161185414041222;
+  justify-self: start;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  grid-area: 1/1/2/2;
+  top: var(--_marginTopValue, 0);
+  left: var(--_marginLeftValue, 0);
+  height: auto;
+  min-height: 0px;
+  max-height: 999999px;
+  max-width: 999999px;
+  min-width: 0px;
+  cursor: move;
+  position: relative;
+  z-index: 1;
+  width: auto;
+}
+.sc__element[datatypespecial=true] {
+  --_elementWidth: 20;
+}
+.sc__element[datatype=image] {
+  width: calc(1% * var(--_elementWidth, 200));
+}
+.sc__element[datatype=image], .sc__element[datatype=image] .element__wrapper {
+  aspect-ratio: 1/var(--_aspect-ratio, 1);
+}
+.sc__element[datatype=header] {
+  background: #000;
+  padding: 12px;
+  color: #fff;
+}
+.sc__element * {
+  pointer-events: none;
+}
+.sc__element > div.element__wrapper {
+  display: flex;
+}
+.sc__element > div.element__wrapper sc-image, .sc__element > div.element__wrapper picture {
+  display: flex;
+  aspect-ratio: 1/var(--_aspect-ratio, 1);
+}
+.sc__element > div.element__wrapper img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 4px;
+}/*# sourceMappingURL=cms-image.module.css.map */

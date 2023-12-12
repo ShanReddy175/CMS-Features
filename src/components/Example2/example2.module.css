@@ -1,0 +1,42 @@
+.dnd__cls .comp__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.dnd__cls .comp__header h1 {
+  font-size: clamp(40px, 40%, 60px);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: color-mix(in lch, yellow 10%, green 45%);
+}
+.dnd__cls .body {
+  margin-block-start: 30px;
+  border-radius: 4px;
+}
+.dnd__cls .body section {
+  padding: 5px;
+  border: 2px solid color-mix(in lch, green, yellow);
+  display: grid;
+  grid-template-rows: minmax(45vh, auto);
+  grid-template-columns: repeat(2, 1fr);
+}
+.dnd__cls .body section > div[datatype=column] {
+  display: grid;
+  border: 2px solid color-mix(in lch, rgb(128, 15, 0), yellow);
+  border-radius: 4px;
+}
+.dnd__cls .body section > div[datatype=column][id=cms__col1] {
+  position: relative;
+}
+.dnd__cls .body section > div[datatype=column][id=cms__col1] > .col__wrapper {
+  display: none;
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  background: red;
+}/*# sourceMappingURL=example2.module.css.map */

@@ -1,0 +1,154 @@
+@use 'sass:list';
+@use 'sass:map';
+$colors: (
+    primary: #2551f6,
+    secondary: #d5d5d5,
+    
+    border: (
+        section: #7cdb0f,
+        column: #f66025,
+        element: #2551f6
+    )
+);
+
+$insetstyles : ('top', 'left', 'width', 'height');
+
+
+$resizerele : (
+    1: (
+        left:0,
+        top:0,
+        width: 100%,
+        height: 2px,
+        cursor: s-resize
+    ),
+    2: (
+        right:0,
+        top:0,
+        width: 2px,
+        height: 100%,
+        cursor: e-resize
+    ),
+    3: (
+        right:0,
+        bottom:0,
+        width: 100%,
+        height: 2px,
+        cursor: s-resize
+    ),
+    4: (
+        left:0,
+        top:0,
+        width: 2px,
+        height: 100%,
+        cursor: e-resize
+    ),
+    corners: (
+        1: (
+            left: 0,
+            top:0,
+            transform: translate(calc(-1 * var(--_corners-transform-value)), calc(-1 * var(--_corners-transform-value))),
+            cursor:se-resize
+        ),
+        2: (
+            right: 0,
+            top:0,
+            transform: translate(var(--_corners-transform-value), calc(-1 * var(--_corners-transform-value))),
+            cursor: sw-resize
+        ),
+        3: (
+            right: 0,
+            bottom:0,
+            transform: translate(var(--_corners-transform-value), var(--_corners-transform-value)),
+            cursor: nw-resize
+        ),
+        4: (
+            left: 0,
+            bottom:0,
+            transform: translate(calc(-1 * var(--_corners-transform-value)), var(--_corners-transform-value)),
+            cursor: ne-resize
+        )
+    )
+);
+
+.resize_circle{
+    background: #fff;
+    border: 1px solid map.get($colors, primary);
+    border-radius: 50%;
+    --_circle-actual-size :10px;
+    --_circle-size:var(--_corners-circle-size, var(--_circle-actual-size, 10px));
+    width: var(--_circle-size);
+    height: var(--_circle-size);
+    --_corners-transform-value : 25%;
+}
+.resizer__toolbar{
+    position: absolute;
+    // inset: 0 0 0 0;
+    background: transparent;
+
+    @each $value in $insetstyles{
+        @if $value == 'bottom'{
+            bottom: auto;
+        }
+        @else{
+            #{$value} : var(--_#{$value}-value);
+        }
+    }
+
+    & > div{
+        &.wrapper__div{
+            // position: absolute;
+            // inset: 0 0 0 0;
+            background: transparent;
+
+
+            & > div{
+                // position: absolute;
+                // inset: 0 0 0 0;
+                background: transparent;
+
+                &[datahook="sidebar"]{
+                    & > span{
+                        position: absolute;
+                        z-index: 9990;
+                        // border-color: map.get($colors, primary);
+                        background: map.get($colors, primary);
+                        &:after{
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%,-50%);
+                            @extend .resize_circle;
+                        }
+                        @for $i from 1 through 4{
+                            &:nth-of-type(#{$i}){
+                                @each $key, $value in map.get($resizerele, $i){
+                                    #{$key} : #{$value};
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                &[datahook="corners"]{
+                    & > span{
+                        @extend .resize_circle;
+                        --_corners-circle-size:calc(2px + var(--_circle-actual-size));
+                        position: absolute;
+                        z-index: 9991;
+
+                        @for $i from 1 through 4{
+                            &:nth-of-type(#{$i}){
+                                @each $key, $value in map.get(map.get($resizerele, corners), $i){
+                                    #{$key}: #{$value};
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
