@@ -10,7 +10,6 @@
 
 
         if(parentEle == null || dragaele == null) return null;
-
        
         let typeofele={
             0: 'withelement',

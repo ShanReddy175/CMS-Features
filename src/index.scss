@@ -35,7 +35,10 @@ section{
         }
       }
 
-      &:where([datahasboxshadow="true"], [datadragover="true"]){
+      // [datahasboxshadow="true"], 
+      &:where(
+        [datadragover="true"]
+      ){
         // box-shadow: 0 0 10px 10px #2552f65b;
         // position: relative;
 
@@ -66,13 +69,13 @@ section{
               }
             }
           &::before{
-            display: none;
+            // display: none;
               content: "Attach";
               position: absolute;
               top: 0;
               left: 50%;
               transform: translate(-50%, 0);
-              animation: attachanim 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 1 forwards;
+              // animation: attachanim 0.45s cubic-bezier(0.215, 0.61, 0.355, 1) 1 forwards;
               background: #2551f6;
               color: #fff;
               border-radius: 0px 0px 4px 4px;
@@ -82,6 +85,7 @@ section{
               font-weight: 600;
               letter-spacing: 2px;
               z-index: 222;
+              pointer-events: none;
           }
 
       }

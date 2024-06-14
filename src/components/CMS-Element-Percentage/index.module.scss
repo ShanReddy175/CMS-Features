@@ -1,0 +1,74 @@
+@use "sass:map";
+@use "sass:list";
+
+div[datatype=cms-elelemnt-percentage]{
+    display: flex;
+    flex-direction: column;
+    width: calc(1px * var(--_self-ele-perc-width, 0));
+    height: calc(1px * var(--_self-ele-perc-height, 0));
+    // background: blue;
+    pointer-events: none;
+    position: absolute;
+    top: calc(1px * var(--_self-ele-perc-top, 0));
+    left: calc(1px * var(--_self-ele-perc-left, 0));
+    z-index: 999;
+
+    *{
+        pointer-events: none;
+    }
+
+    & > span{
+        display: flex;
+        background-image: repeating-linear-gradient(0deg red 0%, transparent 30px);
+        width: var(--_self-ele-perc-span-width, 0%);
+        height: var(--_self-ele-perc-span-height, 0%);
+        position: absolute;
+        // background-size: var(--_self-border-height) calc(100% + var(--_self-border-gap)),calc(100% + var(--_self-border-gap)) var(--_self-border-height),var(--_self-border-height) calc(100% + var(--_self-border-gap)),calc(100% + var(--_self-border-gap)) var(--_self-border-height);
+        background-position: var(--_self-bp);
+        background-repeat: no-repeat;
+        --_clr-border: blue;
+        --_self-border-width: 10px;
+        --_self-border-gap: 20px;
+        --_self-border-height: 1px;
+        background-image: var(--_self-background-image);
+        background-size: var(--_self-background-size);
+        z-index: -1;
+        display: flex;
+        align-items: var(--_self-ai);
+        justify-content: var(--_self-jc);
+        overflow: clip;
+        --_self-number-gap: 10px;
+
+        &::before{
+            content: attr(datavalue);
+            // position: absolute;
+            color: var(--_clr-border);
+            margin-block-end: var(--_self-number-mbe, 0);
+            margin-inline-end: var(--_self-number-mie, 0);
+
+            // left: 0;
+            // top: 50%;
+        }
+
+        &[datatype="inline"]{
+            --_self-background-image: repeating-linear-gradient(90deg,var(--_clr-border),var(--_clr-border) var(--_self-border-width),transparent var(--_self-border-width),transparent var(--_self-border-gap));
+            --_self-background-size: calc(100% + var(--_self-border-gap)) var(--_self-border-height);
+            --_self-ele-perc-span-width: var(--_self-span-inline-width, 0);
+            --_self-ele-perc-span-height: var(--_self-span-inline-height, 0);
+            --_self-bp: bottom;
+            --_self-jc: center;
+            --_self-ai: flex-end;
+            --_self-number-mbe: var(--_self-number-gap);
+        }
+        &[datatype="block"]{
+            --_self-background-image: repeating-linear-gradient(0deg,var(--_clr-border),var(--_clr-border) var(--_self-border-width),transparent var(--_self-border-width),transparent var(--_self-border-gap));
+            --_self-background-size: var(--_self-border-height) calc(100% + var(--_self-border-gap));
+            --_self-ele-perc-span-width: var(--_self-span-block-width, 0);
+            --_self-ele-perc-span-height: var(--_self-span-block-height, 0);
+            --_self-bp: right;
+            --_self-jc: flex-end;
+            --_self-ai: center;
+            --_self-number-mie: var(--_self-number-gap);
+        }
+    }
+}

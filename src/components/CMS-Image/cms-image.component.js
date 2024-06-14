@@ -61,7 +61,7 @@ export default function CMSImage(props){
                     <sc-image>
                         <picture>
                             <source srcSet="https://cdn.grabon.in/gograbon/images/banners/banner-1697803511273/Offer%20Code.jpg" media="(min-width: 1200px)" />
-                            <source srcSet="https://cdn.grabon.in/gograbon/images/banners/banner-1697803511273/Offer%20Code.jpg" media="(min-width: 800px)" />
+                            <source srcSet="https://cdn.grabon.in/gograbon/images/union/1717563762830.jpg" media="(min-width: 800px)" />
                             <img src="https://cdn.grabon.in/gograbon/images/banners/banner-1697803511273/Offer%20Code.jpg" alt={`srcSet Explore`}/>
                         </picture>
                     </sc-image>

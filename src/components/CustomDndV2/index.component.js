@@ -2,13 +2,16 @@ import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import CMSImage from '../CMS-Image/cms-image.component';
 import setTimeoutAsync from '../../helpers/settimeout';
-import { getPositionOfElement } from '../../helpers/getposition';
+import { getPositionOfElementV2 } from '../../helpers/getposition-v2';
 import { dragOverColumn } from '../../helpers/dragovercolumn';
 import { createDynamicID } from '../../helpers/createdynamicID';
 import { useDispatch } from 'react-redux';
 import { showRuler } from '../../redux/slices/rulerslice';
+import { deleteEmptyDivs } from '../../helpers/delete-empty-divs';
+import { onSCElementClick } from '../../helpers/onsc-element-click';
+import { showElementPercentage } from '../../redux/slices/elementPercSlice';
 
-export default function CMSDND(props){
+export default function CustomDNDV2(props){
     const dragEle = props.children;
     const dragEleRef = useRef(null);
     const currEle = props?.currEle;
@@ -33,10 +36,15 @@ export default function CMSDND(props){
             // targetEle = targetEle.parentElement;
             targetEle = targetEle.closest('[datadivtype="column"]');
         }
+        // currEle.style.width = `calc(1px * ${currEle.getBoundingClientRect()['width']})`;
         // currEle.style.position = 'fixed';
+
         let newtargetEle = await dragOverColumn(e.clientX, e.clientY);
-        if(!newtargetEle) return;
+        // console.log(newtargetEle, targetEle)
+        // if(!newtargetEle) return;
+        if(!newtargetEle) newtargetEle = targetEle;
         let newhasElement = [...newtargetEle.querySelectorAll('div[datadivtype="element"]')].some(ele => ele == currEle);
+        // console.log(newhasElement)
         // console.log(newhasElement)
         scelements.forEach(ele => {
             ele.style.zIndex = 1;
@@ -45,10 +53,11 @@ export default function CMSDND(props){
 
         hasElement = [...targetEle.querySelectorAll('div[datadivtype="element"]')].some(ele => ele == currEle);
 
-        let values = await getPositionOfElement(e,targetEle, currEle, 0);
 
-        let valueswithoutele = await getPositionOfElement(e, targetEle, currEle, 1);
 
+        let values = await getPositionOfElementV2(e,targetEle, currEle, 0);
+
+        let valueswithoutele = await getPositionOfElementV2(e, targetEle, currEle, 1);
         dispatch(
             showRuler(
             {
@@ -60,6 +69,18 @@ export default function CMSDND(props){
                 pageY: e.clientY
             })
         );
+        dispatch(
+            showElementPercentage({
+                show: true,
+                currentElement: currEle.id,
+                currentColumn: newtargetEle?.id,
+                event: {clientX: e.clientX, clientY: e.clientY}
+            })
+        );
+
+        onSCElementClick(null, false, currEle);
+
+    
 
         // console.log(values)
 
@@ -95,50 +116,62 @@ export default function CMSDND(props){
     const onDrop = async(e) => {
         e.preventDefault();
         e.stopPropagation();
-
         let getid = e.dataTransfer.getData('dataid');
         let newtargetEle = await dragOverColumn(e.clientX, e.clientY);
         if(!newtargetEle) return;
         let allelements = [...newtargetEle.querySelectorAll('div[datadivtype="element"]')];
         let newhasElement = allelements.some(ele => ele.id == currEle.id);
         let isDraggable = currEle.getAttribute('draggable') == "true" ;
-        let values = await getPositionOfElement(e,newtargetEle, currEle, 0);
+        let values = await getPositionOfElementV2(e,newtargetEle, currEle, 0);
         if(!newhasElement){
 
             let createID = await createDynamicID(5);;
             let createDiv = document.createElement('div');
-            // [...currEle.attributes].forEach((attr, index)=>{
-            //     console.log(attr?.nodeName, attr?.nodeValue)
-
-            //     createDiv.setAttribute(attr?.nodeName, attr?.nodeValue)
-            // })
-            // createDiv.app
             let dom = ReactDOM.createRoot(createDiv);
             
             dom.render(
                 <>
-                <CMSImage 
-                    id={createID} 
-                    currEle={currEle} 
-                    setCurrEle={setCurrEle} 
-                    draggable={true} opacity="0" 
+                    <CMSImage 
+                        id={createID} 
+                        currEle={currEle} 
+                        setCurrEle={setCurrEle} 
+                        draggable={true} 
+                        opacity="0" 
                     />
             </>);
 
             // dom.unmount();
             newtargetEle.appendChild(createDiv)
+
+            let existingStyles = currEle?.getAttribute('style');
+            const newEle = document.getElementById(`${getid}`);
+            // console.log(existingStyles)
             document.getElementById(`${getid}`).style.opacity="0";
             currEle.remove();
 
             await setTimeoutAsync(1);
             getid=createID;
             document.getElementById(`${getid}`).style.opacity="1";
+            document.getElementById(`${getid}`).setAttribute('style', `${existingStyles}`);
             document.getElementById(`${getid}`).style.setProperty('--_marginLeftValue', `${values.x}%`);
             document.getElementById(`${getid}`).style.setProperty('--_marginTopValue', `${values.y}%`);
 
             let dragEventEnd = new Event('dragend');
             document.getElementById(`${getid}`).dispatchEvent(dragEventEnd);
-            // currEle.style.position = 'relative';
+            currEle.style.width = `calc(1% * var(--_elementWidth, 200))`;
+            currEle.style.position = 'relative';
+
+
+            // await setTimeoutAsync(1000)
+            // const creatDivChildren = [...createDiv.children];
+            // creatDivChildren.forEach(child => {
+            //     createDiv.parentNode.insertBefore(child, createDiv);
+            // })
+
+            // createDiv.parentNode.removeChild(createDiv);
+        }
+        else{
+            onSCElementClick(null, true, currEle)
         }
 
         await onDragLeave();
@@ -157,6 +190,8 @@ export default function CMSDND(props){
                 ele.style.pointerEvents = 'auto';
             })
         },100)
+        // currEle.style.width = `calc(1% * var(--_elementWidth, 200))`;
+        // currEle.style.position = 'relative';
         setCurrEle(null)
     }
     
@@ -184,7 +219,13 @@ export default function CMSDND(props){
                         pageY: 0
                     })
                 );
-            }, 1000)
+
+                
+            }, 0)
+
+            // scgrids.forEach((scgrid, index) => {
+            //     deleteEmptyDivs(scgrid);
+            // })
         }
         if(currEle !== null){
             scelements.forEach((scele,index)=>{
@@ -193,17 +234,18 @@ export default function CMSDND(props){
                 }
             })
 
-            // dispatch(showRuler({show:true, currentElement: currEle.id}));
 
 
             
 
             const parentSection = dragEleRef.current;
             if(parentSection){
-                parentSection.ondragover = onDragOver;
-                // parentSection.ondragenter= onDragEnter;
-                parentSection.ondrop = onDrop;
-                parentSection.ondragleave = onDragLeave;
+                // parentSection.ondragover = onDragOver;
+                // parentSection.ondrop = onDrop;
+                // parentSection.ondragleave = onDragLeave;
+                document.body.ondragover = onDragOver;
+                document.body.ondrop = onDrop;
+                document.body.ondragleave = onDragLeave;
             }
         }
     }, [currEle])
@@ -214,7 +256,7 @@ export default function CMSDND(props){
             <>
                 <section 
                     ref={dragEleRef}
-                    // onDragOver={onDragOver}
+                    datatype='cms_page_wrapper'
                 >
                     {dragEle.props.children}
                 </section>

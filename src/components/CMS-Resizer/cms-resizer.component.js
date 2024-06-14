@@ -13,6 +13,7 @@ export default function ResizerComponent(props){
     // const currentColumn = document.querySelector(`#${resizerState.currentColumn}`);
     const currentColumn = currentElement?.parentElement;
     const [dragValues, setDragValues] = useState({});
+    const minDragValue = 30;
     const datahook = {
         sidebar : 
         [
@@ -82,28 +83,28 @@ export default function ResizerComponent(props){
     useEffect(()=>{
         const removeHandler = () => {
             document.addEventListener('click', (e) => {
-            const isElement = e.target.getAttribute('datadivtype') == 'element';
-            const isResizer = e.target == resizerRef.current;
-            const resizerChilds = resizerRef.current?.querySelectorAll('span');
-            if(resizerChilds?.length > 0){
-                setTimeout(() => {
-                    let isResizerChild = false;
-                    resizerChilds.forEach((spanele, index)=>{
-                        if(e.target == spanele){
-                            isResizerChild = true
+                const isElement = e.target.getAttribute('datadivtype') == 'element';
+                const isResizer = e.target == resizerRef.current;
+                const resizerChilds = resizerRef.current?.querySelectorAll('span');
+                if(resizerChilds?.length > 0){
+                    setTimeout(() => {
+                        let isResizerChild = false;
+                        resizerChilds.forEach((spanele, index)=>{
+                            if(e.target == spanele){
+                                isResizerChild = true
+                            }
+                        })
+                        // const isResizerChild = [...resizerChilds].some(ele => ele == e.target);
+                        // const isResizerChild = [...resizerRef.current?.querySelectorAll('span')]?.some(ele => ele == e.target);
+                        if(
+                            !isElement 
+                            && !isResizer 
+                            && !isResizerChild
+                        ){
+                            onSCElementClick(null, false, null)
                         }
-                    })
-                    // const isResizerChild = [...resizerChilds].some(ele => ele == e.target);
-                    // const isResizerChild = [...resizerRef.current?.querySelectorAll('span')]?.some(ele => ele == e.target);
-                    if(
-                        !isElement 
-                        && !isResizer 
-                        && !isResizerChild
-                    ){
-                        onSCElementClick(null, false, null)
-                    }
-                }, 100)
-            }
+                    }, 0)
+                }
             })
         }
 
@@ -123,9 +124,12 @@ export default function ResizerComponent(props){
 
     useEffect(()=>{
         if(values.length > 0){
+            // console.log(values)
             if(resizerRef.current){
                 for(let i=0; i<insetstyles.length; i++){
                     const side = insetstyles[i];
+                    // const condValue = values[i] !== 'auto' && values[i] <=minDragValue ? minDragValue : values[i];
+                    const condValue = values[i];
                     const sideValue = {
                         right: '100%',
                         // bottom: `calc(1px * ${document.getElementById('root')?.getBoundingClientRect().height})`
@@ -136,8 +140,8 @@ export default function ResizerComponent(props){
                                                 side == 'right' || side == 'bottom'
                                             ) 
                                             ? 
-                                            `calc(${sideValue[side]} - calc(1px * ${values[i]}))` : 
-                                            `calc(1px * ${values[i]})`;
+                                            `calc(${sideValue[side]} - calc(1px * ${condValue}))` : 
+                                            `calc(1px * ${condValue})`;
                     resizerRef.current.style.setProperty(property, propertyValue);
                 }
             }
@@ -146,6 +150,7 @@ export default function ResizerComponent(props){
 
     const onTopDrag = (yValue, parentele) => {
         const yValueinPercinpix = currentElement.getBoundingClientRect().height - (yValue - currentElement.getBoundingClientRect().top);
+        if(yValueinPercinpix <= minDragValue) return;
         const computedStyle = window.getComputedStyle(currentElement);
 
         // Get the value of the 'top' property
@@ -163,6 +168,7 @@ export default function ResizerComponent(props){
                                         - 
                                         currentElement.getBoundingClientRect().left
                                     );
+        if(xValueinPercinpix <= minDragValue) return;
         const xValueinPerc = (
                                 xValueinPercinpix 
                                 / parentele.getBoundingClientRect().width
